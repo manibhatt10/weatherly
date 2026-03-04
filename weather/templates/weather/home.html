@@ -1,11 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weatherly</title>
+    <style>
+        /* ── Reset & base ───────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #e0e0e0;
+            padding: 1rem;
+        }
+
+        /* ── Card ───────────────────────────── */
+        .card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 1.25rem;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #9ab;
+            margin-bottom: 1.75rem;
+        }
+
+        /* ── Search form ────────────────────── */
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-form input[type="text"] {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 0.65rem;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-form input[type="text"]::placeholder {
+            color: #789;
+        }
+
+        .search-form input[type="text"]:focus {
+            border-color: #5bbcf5;
+        }
+
+        .search-form button {
+            padding: 0.7rem 1.3rem;
+            border: none;
+            border-radius: 0.65rem;
+            background: linear-gradient(135deg, #1d8cf8, #3358f4);
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .search-form button:hover {
+            opacity: 0.88;
+        }
+
+        /* ── Weather result ─────────────────── */
+        .result {
+            animation: fadeIn 0.35s ease;
+        }
+
+        .result .city-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #b0d4f1;
+            text-transform: capitalize;
+            margin-bottom: 0.75rem;
+        }
+
+        .result .temp {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .result .desc {
+            font-size: 1rem;
+            color: #9ab;
+            text-transform: capitalize;
+        }
+
+        /* ── Error ──────────────────────────── */
+        .error {
+            background: rgba(255, 70, 70, 0.12);
+            border: 1px solid rgba(255, 70, 70, 0.3);
+            color: #ff9a9a;
+            padding: 0.75rem 1rem;
+            border-radius: 0.65rem;
+            font-size: 0.9rem;
+            animation: fadeIn 0.35s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Welcome to Weatherly</h1>
+    <div class="card">
+        <h1>🌤️ Weatherly</h1>
+        <p class="subtitle">Search for any city to get live weather</p>
+
+        <!-- Search form (GET request) -->
+        <form class="search-form" method="get" action="">
+            <input type="text" id="city-input" name="city" placeholder="Enter city name…" value="{{ city }}"
+                autocomplete="off" required>
+            <button type="submit" id="search-btn">Search</button>
+        </form>
+
+        <!-- Weather result -->
+        {% if temperature is not None %}
+        <div class="result">
+            <p class="city-name">{{ city }}</p>
+            <p class="temp">{{ temperature }}°C</p>
+            <p class="desc">{{ description }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Error message -->
+        {% if error %}
+        <div class="error">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+    </div>
 </body>
+
 </html>
